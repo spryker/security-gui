@@ -9,7 +9,9 @@ namespace SprykerTest\Zed\SecurityGui\Communication\Plugin\Security;
 
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\UserTransfer;
-use Spryker\Zed\SecurityGui\Communication\Plugin\Security\UserSecurityPlugin;
+use ReflectionClass;
+use Spryker\Zed\Security\Communication\Configurator\SecurityConfigurator;
+use Spryker\Zed\SecurityGui\Communication\Plugin\Security\ZedUserSecurityPlugin;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,11 +23,11 @@ use Symfony\Component\HttpFoundation\Response;
  * @group Communication
  * @group Plugin
  * @group Security
- * @group UserSecurityPluginTest
+ * @group ZedUserSecurityPluginTest
  *
  * Add your own group annotations below this line
  */
-class UserSecurityPluginTest extends Unit
+class ZedUserSecurityPluginTest extends Unit
 {
     /**
      * @uses \Spryker\Zed\Session\Communication\Plugin\Application\SessionApplicationPlugin::SERVICE_SESSION
@@ -35,8 +37,6 @@ class UserSecurityPluginTest extends Unit
     protected const SERVICE_SESSION = 'session';
 
     /**
-     * @uses \Spryker\Zed\Security\Communication\Plugin\Application\SecurityApplicationPlugin::SERVICE_SECURITY_TOKEN_STORAGE
-     *
      * @var string
      */
     protected const SERVICE_SECURITY_TOKEN_STORAGE = 'security.token_storage';
@@ -49,27 +49,23 @@ class UserSecurityPluginTest extends Unit
     /**
      * @return void
      */
-    protected function _before(): void
-    {
-        parent::_before();
-
-        $this->tester->enableSecurityApplicationPlugin();
-    }
-
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        if ($this->tester->isSymfonyVersion5() !== true) {
-            $this->markTestSkipped('Compatible only with `symfony/security-core` package version ^5.0.0. To be removed once Symfony 5 support is discontinued.');
+        if ($this->tester->isSymfonyVersion5() === true) {
+            $this->markTestSkipped('Compatible only with `symfony/security-core` package version >= 6. Will be enabled by default once Symfony 5 support is discontinued.');
         }
 
         $this->tester->addRoute('test', '/ignorable', function () {
             return new Response('test-text');
         });
+
+        $securityPlugin = new ZedUserSecurityPlugin();
+        $securityPlugin->setFactory($this->tester->getCommunicationFactory());
+        $this->tester->addSecurityPlugin($securityPlugin);
+        $this->tester->mockSecurityDependencies();
+        $this->tester->enableSecurityApplicationPlugin();
     }
 
     /**
@@ -83,10 +79,6 @@ class UserSecurityPluginTest extends Unit
         $userTransfer = $this->tester->haveUser([
             UserTransfer::PASSWORD => 'foo',
         ]);
-
-        $securityPlugin = new UserSecurityPlugin();
-        $securityPlugin->setFactory($this->tester->getCommunicationFactory());
-        $this->tester->addSecurityPlugin($securityPlugin);
 
         $token = $container->get(static::SERVICE_SECURITY_TOKEN_STORAGE)->getToken();
         $this->assertNull($token);
@@ -116,10 +108,6 @@ class UserSecurityPluginTest extends Unit
             UserTransfer::PASSWORD => 'foo',
         ]);
 
-        $securityPlugin = new UserSecurityPlugin();
-        $securityPlugin->setFactory($this->tester->getCommunicationFactory());
-        $this->tester->addSecurityPlugin($securityPlugin);
-
         $token = $container->get(static::SERVICE_SECURITY_TOKEN_STORAGE)->getToken();
         $this->assertNull($token);
 
@@ -148,14 +136,23 @@ class UserSecurityPluginTest extends Unit
 
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
 
-        $securityPlugin = new UserSecurityPlugin();
-        $securityPlugin->setFactory($this->tester->getCommunicationFactory());
-        $this->tester->addSecurityPlugin($securityPlugin);
-
         // Act
         $httpKernelBrowser->request('get', '/ignorable');
 
         // Assert
         $this->assertSame('test-text', $httpKernelBrowser->getResponse()->getContent());
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $reflection = new ReflectionClass(SecurityConfigurator::class);
+        $property = $reflection->getProperty('securityConfiguration');
+        $property->setAccessible(true);
+        $property->setValue(null);
     }
 }
