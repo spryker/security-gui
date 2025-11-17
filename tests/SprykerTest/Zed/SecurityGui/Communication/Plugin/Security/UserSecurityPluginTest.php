@@ -70,6 +70,10 @@ class UserSecurityPluginTest extends Unit
         $this->tester->addRoute('test', '/ignorable', function () {
             return new Response('test-text');
         });
+
+        $this->tester->addRoute('security-gui:login', '/login', function () {
+            return new Response('login-page');
+        });
     }
 
     /**
