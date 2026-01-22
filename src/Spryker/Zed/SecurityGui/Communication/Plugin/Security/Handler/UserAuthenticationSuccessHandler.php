@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\SecurityGui\Communication\Plugin\Security\Handler;
 
+use Generated\Shared\Transfer\GlueAuthenticationRequestContextTransfer;
+use Generated\Shared\Transfer\OauthRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,6 +51,21 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
     protected const MULTI_FACTOR_AUTH_LOGIN_USER_EMAIL_SESSION_KEY = '_multi_factor_auth_login_user_email';
 
     /**
+     * @var string
+     */
+    protected const SESSION_KEY_ACCESS_TOKEN = 'ACCESS_TOKEN';
+
+    /**
+     * @var string
+     */
+    protected const GRANT_TYPE_PASSWORD = 'password';
+
+    /**
+     * @var string
+     */
+    protected const GLUE_BACKEND_API_APPLICATION = 'GLUE_BACKEND_API_APPLICATION';
+
+    /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
      *
@@ -56,6 +73,10 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response
     {
+        if ($this->getConfig()->isAccessTokenGenerationOnLoginEnabled()) {
+            $this->generateAndStoreAccessToken($request);
+        }
+
         /** @var \Spryker\Zed\SecurityGui\Communication\Security\UserInterface $user */
         $user = $token->getUser();
         $userTransfer = $user->getUserTransfer();
@@ -113,5 +134,36 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
         }
 
         return new RedirectResponse($this->getConfig()->getUrlHome());
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return void
+     */
+    protected function generateAndStoreAccessToken(Request $request): void
+    {
+        $authData = $request->request->all('auth');
+
+        $glueAuthenticationRequestContextTransfer = (new GlueAuthenticationRequestContextTransfer())
+            ->setRequestApplication(static::GLUE_BACKEND_API_APPLICATION);
+
+        $oauthRequestTransfer = (new OauthRequestTransfer())
+            ->setGrantType(static::GRANT_TYPE_PASSWORD)
+            ->setUsername($authData['username'])
+            ->setPassword($authData['password'])
+            ->setGlueAuthenticationRequestContext($glueAuthenticationRequestContextTransfer);
+
+        $oauthResponseTransfer = $this->getFactory()
+            ->getOauthFacade()
+            ->processAccessTokenRequest($oauthRequestTransfer);
+
+        if ($oauthResponseTransfer->getIsValid()) {
+            $request->getSession()->set(static::SESSION_KEY_ACCESS_TOKEN, [
+                'access_token' => $oauthResponseTransfer->getAccessToken(),
+                'refresh_token' => $oauthResponseTransfer->getRefreshToken(),
+                'expires_at' => time() + (int)$oauthResponseTransfer->getExpiresIn(),
+            ]);
+        }
     }
 }

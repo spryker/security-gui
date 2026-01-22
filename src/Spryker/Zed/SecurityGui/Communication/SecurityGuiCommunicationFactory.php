@@ -251,4 +251,12 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::CLIENT_SESSION);
     }
+
+    /**
+     * @return \Spryker\Zed\Oauth\Business\OauthFacadeInterface
+     */
+    public function getOauthFacade()
+    {
+        return $this->getProvidedDependency(SecurityGuiDependencyProvider::FACADE_OAUTH);
+    }
 }

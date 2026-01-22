@@ -78,6 +78,11 @@ class SecurityGuiConfig extends AbstractBundleConfig
     protected const PASSWORD_VALIDATION_MESSAGE = 'Your password must include at least one uppercase letter, one lowercase letter, one number, and one special character from the following list: !@#$%^&*()_-+=[]{}|;:<>.,/?\~. Non-Latin and other special characters are not allowed.';
 
     /**
+     * @var bool
+     */
+    protected const IS_ACCESS_TOKEN_GENERATION_ON_LOGIN_ENABLED = false;
+
+    /**
      * Specification:
      * - Checks if the security blocker is enabled.
      * - It is disabled by default.
@@ -198,5 +203,21 @@ class SecurityGuiConfig extends AbstractBundleConfig
     public function getPasswordValidationMessage(): string
     {
         return static::PASSWORD_VALIDATION_MESSAGE;
+    }
+
+    /**
+     * Specification:
+     * - Checks if access token generation on login is enabled.
+     * - When enabled, generates and stores a Glue Backend API access token in session on successful login.
+     * - Required for Falcon UI integration.
+     * - Disabled by default.
+     *
+     * @api
+     *
+     * @return bool
+     */
+    public function isAccessTokenGenerationOnLoginEnabled(): bool
+    {
+        return static::IS_ACCESS_TOKEN_GENERATION_ON_LOGIN_ENABLED;
     }
 }

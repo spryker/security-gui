@@ -79,6 +79,11 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
     public const CLIENT_SESSION = 'CLIENT_SESSION';
 
     /**
+     * @var string
+     */
+    public const FACADE_OAUTH = 'FACADE_OAUTH';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -98,6 +103,7 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addUserAuthenticationHandlerPlugins($container);
         $container = $this->addSecurityTokenStorage($container);
         $container = $this->addSessionClient($container);
+        $container = $this->addOauthFacade($container);
 
         return $container;
     }
@@ -309,6 +315,20 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
             return new SecurityGuiToSessionClientBridge(
                 $container->getLocator()->session()->client(),
             );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addOauthFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_OAUTH, function (Container $container) {
+            return $container->getLocator()->oauth()->facade();
         });
 
         return $container;

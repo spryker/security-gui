@@ -9,6 +9,7 @@
         "spryker/log": "^3.17.0",
         "spryker/messenger": "^3.0.0",
         "spryker/multi-factor-auth-extension": "^1.1.0",
+        "spryker/oauth": "^2.13.0",
         "spryker/security": "^1.8.0",
         "spryker/security-blocker": "^1.0.0",
         "spryker/security-extension": "^1.0.0",
