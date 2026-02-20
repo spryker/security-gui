@@ -159,11 +159,14 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
             ->processAccessTokenRequest($oauthRequestTransfer);
 
         if ($oauthResponseTransfer->getIsValid()) {
-            $request->getSession()->set(static::SESSION_KEY_ACCESS_TOKEN, [
+            $tokenData = [
                 'access_token' => $oauthResponseTransfer->getAccessToken(),
                 'refresh_token' => $oauthResponseTransfer->getRefreshToken(),
                 'expires_at' => time() + (int)$oauthResponseTransfer->getExpiresIn(),
-            ]);
+            ];
+            $request->getSession()->set(static::SESSION_KEY_ACCESS_TOKEN, $tokenData);
+
+            $this->getFactory()->getSessionClient()->set(static::SESSION_KEY_ACCESS_TOKEN, $tokenData);
         }
     }
 }
