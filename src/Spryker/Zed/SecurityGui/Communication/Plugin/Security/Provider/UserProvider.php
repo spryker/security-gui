@@ -150,11 +150,6 @@ class UserProvider extends AbstractPlugin implements UserProviderInterface
         return is_a($class, User::class, true);
     }
 
-    /**
-     * @param string $username
-     *
-     * @return \Generated\Shared\Transfer\UserTransfer|null
-     */
     protected function findUserByUsername(string $username): ?UserTransfer
     {
         if (!$this->getFactory()->getUserFacade()->hasActiveUserByUsername($username)) {
@@ -199,11 +194,6 @@ class UserProvider extends AbstractPlugin implements UserProviderInterface
         }
     }
 
-    /**
-     * @param string $username
-     *
-     * @return \Generated\Shared\Transfer\UserCriteriaTransfer
-     */
     protected function createUserCriteriaTransfer(string $username): UserCriteriaTransfer
     {
         $userConditionsTransfer = (new UserConditionsTransfer())
@@ -213,9 +203,6 @@ class UserProvider extends AbstractPlugin implements UserProviderInterface
         return (new UserCriteriaTransfer())->setUserConditions($userConditionsTransfer);
     }
 
-    /**
-     * @return \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     protected function getUserNotFoundException(): AuthenticationException
     {
         if ($this->isSymfonyVersion5() === true) {

@@ -34,9 +34,6 @@ class UserProviderTest extends Unit
      */
     protected SecurityGuiCommunicationTester $tester;
 
-    /**
-     * @return void
-     */
     public function testLoadUserByUsernameThrowsExceptionWhenUserIsRestrictedByUserLoginRestrictionPlugin(): void
     {
         // Arrange
@@ -53,9 +50,6 @@ class UserProviderTest extends Unit
         $this->tester->getUser($userTransfer->getUsernameOrFail());
     }
 
-    /**
-     * @return void
-     */
     public function testLoadUserByUsernameReturnsUserWhenUserIsNotRestrictedByUserLoginRestrictionPlugin(): void
     {
         // Arrange

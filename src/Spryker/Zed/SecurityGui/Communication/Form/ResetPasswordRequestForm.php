@@ -43,9 +43,6 @@ class ResetPasswordRequestForm extends AbstractType
             ->addSubmitField($builder);
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix(): string
     {
         return 'reset_password';

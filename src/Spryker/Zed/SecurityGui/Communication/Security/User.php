@@ -54,48 +54,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->roles;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSalt(): ?string
     {
         return null;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    /**
-     * @return string
-     */
     public function getUserIdentifier(): string
     {
         return $this->userTransfer->getUsernameOrFail();
     }
 
-    /**
-     * @return void
-     */
     public function eraseCredentials(): void
     {
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\UserTransfer
-     */
     public function getUserTransfer(): UserTransfer
     {
         return $this->userTransfer;

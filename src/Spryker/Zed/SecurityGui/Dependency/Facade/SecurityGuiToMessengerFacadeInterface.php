@@ -11,10 +11,5 @@ use Generated\Shared\Transfer\MessageTransfer;
 
 interface SecurityGuiToMessengerFacadeInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\MessageTransfer $message
-     *
-     * @return void
-     */
     public function addErrorMessage(MessageTransfer $message): void;
 }

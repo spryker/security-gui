@@ -32,9 +32,6 @@ class SecurityGuiFacadeTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     public function testAuthenticateUserCallsUserFacade(): void
     {
         // Arrange

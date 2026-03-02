@@ -9,8 +9,5 @@ namespace Spryker\Zed\SecurityGui\Dependency\Facade;
 
 interface SecurityGuiToSecurityFacadeInterface
 {
-    /**
-     * @return bool
-     */
     public function isUserLoggedIn(): bool;
 }

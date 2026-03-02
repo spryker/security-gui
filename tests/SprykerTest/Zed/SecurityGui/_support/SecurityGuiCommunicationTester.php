@@ -51,11 +51,6 @@ class SecurityGuiCommunicationTester extends Actor
         return $factory;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     */
     public function getUser(string $username): UserInterface
     {
         if ($this->isSymfonyVersion5() === true) {

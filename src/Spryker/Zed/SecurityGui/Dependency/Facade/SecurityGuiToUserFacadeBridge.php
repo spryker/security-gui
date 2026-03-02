@@ -26,11 +26,6 @@ class SecurityGuiToUserFacadeBridge implements SecurityGuiToUserFacadeInterface
         $this->userFacade = $userFacade;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $user
-     *
-     * @return \Generated\Shared\Transfer\UserTransfer
-     */
     public function updateUser(UserTransfer $user): UserTransfer
     {
         return $this->userFacade->updateUser($user);
@@ -56,11 +51,6 @@ class SecurityGuiToUserFacadeBridge implements SecurityGuiToUserFacadeInterface
         return $this->userFacade->hasActiveUserByUsername($username);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserCriteriaTransfer $userCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\UserCollectionTransfer
-     */
     public function getUserCollection(UserCriteriaTransfer $userCriteriaTransfer): UserCollectionTransfer
     {
         return $this->userFacade->getUserCollection($userCriteriaTransfer);

@@ -18,17 +18,11 @@ use Spryker\Zed\SecurityGui\SecurityGuiDependencyProvider;
  */
 class SecurityGuiBusinessFactory extends AbstractBusinessFactory
 {
-    /**
-     * @return \Spryker\Zed\SecurityGui\Business\Authenticator\UserAuthenticatorInterface
-     */
     public function createUserAuthenticator(): UserAuthenticatorInterface
     {
         return new UserAuthenticator($this->getUserFacade());
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToUserFacadeInterface
-     */
     public function getUserFacade(): SecurityGuiToUserFacadeInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::FACADE_USER);

@@ -12,8 +12,5 @@ use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 
 interface UserInterface extends SecurityUserInterface
 {
-    /**
-     * @return \Generated\Shared\Transfer\UserTransfer
-     */
     public function getUserTransfer(): UserTransfer;
 }

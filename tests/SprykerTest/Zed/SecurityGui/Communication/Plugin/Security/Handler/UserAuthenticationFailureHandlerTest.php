@@ -26,9 +26,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class UserAuthenticationFailureHandlerTest extends AbstractHandlerTest
 {
-    /**
-     * @return void
-     */
     public function testOnAuthenticationFailureAddsFailedLoginAuditLog(): void
     {
         // Arrange

@@ -69,9 +69,6 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
         return $this->getFormFactory()->create(ResetPasswordForm::class);
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Communication\Plugin\Security\Provider\UserProvider
-     */
     public function createUserProvider(): UserProvider
     {
         return new UserProvider(
@@ -91,57 +88,36 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
         return new User($userTransfer, $roles);
     }
 
-    /**
-     * @return \Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface
-     */
     public function createUserAuthenticationSuccessHandler(): AuthenticationSuccessHandlerInterface
     {
         return new UserAuthenticationSuccessHandler();
     }
 
-    /**
-     * @return \Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface
-     */
     public function createUserAuthenticationFailureHandler(): AuthenticationFailureHandlerInterface
     {
         return new UserAuthenticationFailureHandler();
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Communication\Logger\AuditLoggerInterface
-     */
     public function createAuditLogger(): AuditLoggerInterface
     {
         return new AuditLogger();
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToUserFacadeInterface
-     */
     public function getUserFacade(): SecurityGuiToUserFacadeInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::FACADE_USER);
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToUserPasswordResetFacadeInterface
-     */
     public function getUserPasswordResetFacade(): SecurityGuiToUserPasswordResetFacadeInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::FACADE_USER_PASSWORD_RESET);
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToMessengerFacadeInterface
-     */
     public function getMessengerFacade(): SecurityGuiToMessengerFacadeInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::FACADE_MESSENGER);
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToSecurityFacadeInterface
-     */
     public function getSecurityFacade(): SecurityGuiToSecurityFacadeInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::FACADE_SECURITY);
@@ -171,9 +147,6 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::PLUGINS_USER_LOGIN_RESTRICTION);
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Communication\Builder\SecurityGuiOptionsBuilderInterface
-     */
     public function createSecurityGuiOptionsBuilder(): SecurityGuiOptionsBuilderInterface
     {
         return new SecurityGuiOptionsBuilder(
@@ -182,9 +155,6 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
         );
     }
 
-    /**
-     * @return \Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface
-     */
     public function createLoginFormAuthenticator(): AuthenticatorInterface
     {
         return new LoginFormAuthenticator(
@@ -196,9 +166,6 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Communication\Expander\SecurityBuilderExpanderInterface
-     */
     public function createSecurityBuilderExpander(): SecurityBuilderExpanderInterface
     {
         if (class_exists(AuthenticationProviderManager::class) === true) {
@@ -212,17 +179,11 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Dependency\Client\SecurityGuiToSecurityBlockerClientInterface
-     */
     public function getSecurityBlockerClient(): SecurityGuiToSecurityBlockerClientInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::CLIENT_SECURITY_BLOCKER);
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Communication\Badge\MultiFactorAuthBadge
-     */
     public function createMultiFactorAuthBadge(): MultiFactorAuthBadge
     {
         return new MultiFactorAuthBadge($this->getUserMultiFactorAuthenticationHandlerPlugins());
@@ -236,17 +197,11 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::PLUGINS_USER_AUTHENTICATION_HANDLER);
     }
 
-    /**
-     * @return \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
-     */
     public function getTokenStorage(): TokenStorageInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::SERVICE_SECURITY_TOKEN_STORAGE);
     }
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Dependency\Client\SecurityGuiToSessionClientInterface
-     */
     public function getSessionClient(): SecurityGuiToSessionClientInterface
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::CLIENT_SESSION);

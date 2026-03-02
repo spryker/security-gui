@@ -31,9 +31,6 @@ use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
  */
 class UserAuthenticationSuccessHandlerTest extends AbstractHandlerTest
 {
-    /**
-     * @return void
-     */
     public function testOnAuthenticationSuccessAddsSuccessfulLoginAuditLog(): void
     {
         // Arrange
@@ -46,11 +43,6 @@ class UserAuthenticationSuccessHandlerTest extends AbstractHandlerTest
         $userAuthenticationSuccessHandler->onAuthenticationSuccess($request, $tokenMock);
     }
 
-    /**
-     * @param string $expectedAuditLogMessage
-     *
-     * @return \Spryker\Zed\SecurityGui\Communication\Plugin\Security\Handler\UserAuthenticationSuccessHandler
-     */
     protected function getUserAuthenticationSuccessHandler(string $expectedAuditLogMessage): UserAuthenticationSuccessHandler
     {
         $securityGuiCommunicationFactoryMock = $this->getSecurityGuiCommunicationFactoryMock($expectedAuditLogMessage);

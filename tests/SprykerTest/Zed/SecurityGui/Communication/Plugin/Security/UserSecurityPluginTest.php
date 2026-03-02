@@ -46,9 +46,6 @@ class UserSecurityPluginTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     protected function _before(): void
     {
         parent::_before();
@@ -56,9 +53,6 @@ class UserSecurityPluginTest extends Unit
         $this->tester->enableSecurityApplicationPlugin();
     }
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -76,9 +70,6 @@ class UserSecurityPluginTest extends Unit
         });
     }
 
-    /**
-     * @return void
-     */
     public function testUserCanLogin(): void
     {
         // Arrange
@@ -108,9 +99,6 @@ class UserSecurityPluginTest extends Unit
         $this->assertSame($userTransfer->getUsername(), $user->getUsername());
     }
 
-    /**
-     * @return void
-     */
     public function testUserWithInvalidCredentialsCanNotLogin(): void
     {
         // Arrange
@@ -138,9 +126,6 @@ class UserSecurityPluginTest extends Unit
         $this->assertNull($token);
     }
 
-    /**
-     * @return void
-     */
     public function testIgnorablePathsAreAccessible(): void
     {
         // Arrange

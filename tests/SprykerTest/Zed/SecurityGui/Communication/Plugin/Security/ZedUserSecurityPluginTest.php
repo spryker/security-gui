@@ -46,9 +46,6 @@ class ZedUserSecurityPluginTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -68,9 +65,6 @@ class ZedUserSecurityPluginTest extends Unit
         $this->tester->enableSecurityApplicationPlugin();
     }
 
-    /**
-     * @return void
-     */
     public function testUserCanLogin(): void
     {
         // Arrange
@@ -96,9 +90,6 @@ class ZedUserSecurityPluginTest extends Unit
         $this->assertSame($userTransfer->getUsername(), $user->getUsername());
     }
 
-    /**
-     * @return void
-     */
     public function testUserWithInvalidCredentialsCanNotLogin(): void
     {
         // Arrange
@@ -122,9 +113,6 @@ class ZedUserSecurityPluginTest extends Unit
         $this->assertNull($token);
     }
 
-    /**
-     * @return void
-     */
     public function testIgnorablePathsAreAccessible(): void
     {
         // Arrange
@@ -143,9 +131,6 @@ class ZedUserSecurityPluginTest extends Unit
         $this->assertSame('test-text', $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @return void
-     */
     protected function tearDown(): void
     {
         parent::tearDown();

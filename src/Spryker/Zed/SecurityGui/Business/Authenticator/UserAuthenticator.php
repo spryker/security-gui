@@ -18,30 +18,17 @@ class UserAuthenticator implements UserAuthenticatorInterface
      */
     protected $userFacade;
 
-    /**
-     * @param \Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToUserFacadeInterface $userFacade
-     */
     public function __construct(SecurityGuiToUserFacadeInterface $userFacade)
     {
         $this->userFacade = $userFacade;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return void
-     */
     public function authenticateUser(UserTransfer $userTransfer): void
     {
         $this->userFacade->setCurrentUser($userTransfer);
         $this->updateUserLastLoginDate($userTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return void
-     */
     protected function updateUserLastLoginDate(UserTransfer $userTransfer): void
     {
         $userTransfer->setLastLogin((new DateTime())->format(DateTime::ATOM));

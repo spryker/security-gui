@@ -30,9 +30,6 @@ class SecurityGuiBusinessTester extends Actor
 {
     use _generated\SecurityGuiBusinessTesterActions;
 
-    /**
-     * @return \Spryker\Zed\SecurityGui\Business\SecurityGuiFacadeInterface
-     */
     public function getSecurityGuiFacade(): SecurityGuiFacadeInterface
     {
         return $this->getLocator()->securityGui()->facade();

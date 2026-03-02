@@ -83,11 +83,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
      */
     public const FACADE_OAUTH = 'FACADE_OAUTH';
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     public function provideCommunicationLayerDependencies(Container $container): Container
     {
         $container = parent::provideCommunicationLayerDependencies($container);
@@ -108,11 +103,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     public function provideBusinessLayerDependencies(Container $container): Container
     {
         $container = parent::provideBusinessLayerDependencies($container);
@@ -138,11 +128,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addUserFacade(Container $container): Container
     {
         $container->set(static::FACADE_USER, function (Container $container) {
@@ -154,11 +139,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addMessengerFacade(Container $container): Container
     {
         $container->set(static::FACADE_MESSENGER, function (Container $container) {
@@ -170,11 +150,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addUserPasswordResetFacade(Container $container): Container
     {
         $container->set(static::FACADE_USER_PASSWORD_RESET, function (Container $container) {
@@ -186,11 +161,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addSecurityFacade(Container $container): Container
     {
         $container->set(static::FACADE_SECURITY, function (Container $container) {
@@ -202,11 +172,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addAuthenticationLinkPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_AUTHENTICATION_LINK, function () {
@@ -216,11 +181,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addUserRoleFilterPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_USER_ROLE_FILTER, function () {
@@ -230,11 +190,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addUserLoginRestrictionPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_USER_LOGIN_RESTRICTION, function () {
@@ -244,11 +199,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addUserAuthenticationHandlerPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_USER_AUTHENTICATION_HANDLER, function () {
@@ -258,11 +208,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addSecurityTokenStorage(Container $container): Container
     {
         $container->set(static::SERVICE_SECURITY_TOKEN_STORAGE, function (Container $container) {
@@ -320,11 +265,6 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addOauthFacade(Container $container): Container
     {
         $container->set(static::FACADE_OAUTH, function (Container $container) {

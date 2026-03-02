@@ -65,12 +65,6 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
      */
     protected const GLUE_BACKEND_API_APPLICATION = 'GLUE_BACKEND_API_APPLICATION';
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response
     {
         if ($this->getConfig()->isAccessTokenGenerationOnLoginEnabled()) {
@@ -96,11 +90,6 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
         return $this->createRedirectResponse($request);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return void
-     */
     public function executeOnAuthenticationSuccess(UserTransfer $userTransfer): void
     {
         $this->getFacade()->authenticateUser($userTransfer);
@@ -108,11 +97,6 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
         $this->getFactory()->createAuditLogger()->addSuccessfulLoginAuditLog();
     }
 
-    /**
-     * @param bool $requiresAdditionalAuth
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     protected function createAjaxResponse(bool $requiresAdditionalAuth = false): JsonResponse
     {
         return new JsonResponse([
@@ -120,11 +104,6 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
         ]);
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
     protected function createRedirectResponse(Request $request): RedirectResponse
     {
         $targetUrl = $this->getTargetPath($request->getSession(), static::SECURITY_FIREWALL_NAME);
@@ -136,11 +115,6 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
         return new RedirectResponse($this->getConfig()->getUrlHome());
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return void
-     */
     protected function generateAndStoreAccessToken(Request $request): void
     {
         $authData = $request->request->all('auth');

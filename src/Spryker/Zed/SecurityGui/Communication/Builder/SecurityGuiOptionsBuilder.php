@@ -45,10 +45,6 @@ class SecurityGuiOptionsBuilder implements SecurityGuiOptionsBuilderInterface
      */
     protected UserProviderInterface $userProvider;
 
-    /**
-     * @param \Spryker\Zed\SecurityGui\SecurityGuiConfig $config
-     * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     */
     public function __construct(
         SecurityGuiConfig $config,
         UserProviderInterface $userProvider

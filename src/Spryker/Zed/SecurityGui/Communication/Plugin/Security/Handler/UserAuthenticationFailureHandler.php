@@ -33,12 +33,6 @@ class UserAuthenticationFailureHandler extends AbstractPlugin implements Authent
      */
     protected const PARAMETER_REQUIRES_ADDITIONAL_AUTH = 'requires_additional_auth';
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Exception\AuthenticationException $exception
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $this->getFactory()
@@ -57,9 +51,6 @@ class UserAuthenticationFailureHandler extends AbstractPlugin implements Authent
         return new RedirectResponse($this->getConfig()->getUrlLogin());
     }
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     protected function createAjaxResponse(): JsonResponse
     {
         return new JsonResponse([

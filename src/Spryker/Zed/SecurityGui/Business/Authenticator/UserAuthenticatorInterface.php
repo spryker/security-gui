@@ -11,10 +11,5 @@ use Generated\Shared\Transfer\UserTransfer;
 
 interface UserAuthenticatorInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return void
-     */
     public function authenticateUser(UserTransfer $userTransfer): void;
 }

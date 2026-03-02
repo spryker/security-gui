@@ -49,9 +49,6 @@ class LoginForm extends AbstractType
             ->addPasswordField($builder);
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix(): string
     {
         return static::FORM_NAME;

@@ -60,13 +60,6 @@ class LoginFormAuthenticator implements AuthenticatorInterface, AuthenticationEn
      */
     protected const CODE_BLOCKED = 1;
 
-    /**
-     * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     * @param \Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface $authenticationSuccessHandler
-     * @param \Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface $authenticationFailureHandler
-     * @param \Spryker\Zed\SecurityGui\SecurityGuiConfig $config
-     * @param \Spryker\Zed\SecurityGui\Communication\Badge\MultiFactorAuthBadge $multiFactorAuthBadge
-     */
     public function __construct(
         protected UserProviderInterface $userProvider,
         protected AuthenticationSuccessHandlerInterface $authenticationSuccessHandler,
@@ -76,11 +69,6 @@ class LoginFormAuthenticator implements AuthenticatorInterface, AuthenticationEn
     ) {
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\Security\Http\Authenticator\Passport\Passport
-     */
     public function authenticate(Request $request): Passport
     {
         $data = $request->request->all(static::PARAMETER_AUTH);
@@ -101,56 +89,26 @@ class LoginFormAuthenticator implements AuthenticatorInterface, AuthenticationEn
         );
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return bool|null
-     */
     public function supports(Request $request): ?bool
     {
         return $request->request->has(static::PARAMETER_AUTH);
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
-     * @param string $firewallName
-     *
-     * @return \Symfony\Component\HttpFoundation\Response|null
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         return $this->authenticationSuccessHandler->onAuthenticationSuccess($request, $token);
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Exception\AuthenticationException $exception
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         return $this->authenticationFailureHandler->onAuthenticationFailure($request, $exception);
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Exception\AuthenticationException|null $authException
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|null
-     */
     public function start(Request $request, ?AuthenticationException $authException = null): ?RedirectResponse
     {
         return new RedirectResponse($this->config->getUrlLogin());
     }
 
-    /**
-     * @param \Symfony\Component\Security\Http\Authenticator\Passport\Passport $passport
-     * @param string $firewallName
-     *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
-     */
     public function createToken(Passport $passport, string $firewallName): TokenInterface
     {
         return new PostAuthenticationToken(
@@ -174,11 +132,6 @@ class LoginFormAuthenticator implements AuthenticatorInterface, AuthenticationEn
         return $this->createToken($passport, $firewallName);
     }
 
-    /**
-     * @param \Symfony\Component\Security\Http\Authenticator\Passport\Passport $passport
-     *
-     * @return bool
-     */
     protected function assertUserIsPreAuthenticated(Passport $passport): bool
     {
         /** @var \Spryker\Zed\SecurityGui\Communication\Badge\MultiFactorAuthBadge $multiFactorAuthBadge */
