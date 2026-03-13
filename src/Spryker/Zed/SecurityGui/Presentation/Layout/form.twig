@@ -26,9 +26,9 @@
 {% endblock %}
 
 {% block submit_widget  %}
-    <div class="form-group">
+    <div class="form-group d-grid">
         {% set type = type | default('submit') %}
-        {% set attr = attr | merge({class: 'btn btn-block'}) %}
+        {% set attr = attr | merge({class: 'btn btn-primary fw-semibold py-2 btn-block'}) %}
         {{ block('button_widget') }}
     </div>
 {% endblock submit_widget %}
