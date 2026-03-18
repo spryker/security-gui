@@ -40,6 +40,8 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
      */
     protected const PARAMETER_REQUIRES_ADDITIONAL_AUTH = 'requires_additional_auth';
 
+    protected const string PARAMETER_REDIRECT_URL = 'redirect_url';
+
     /**
      * @var string
      */
@@ -84,10 +86,10 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
         $this->executeOnAuthenticationSuccess($userTransfer);
 
         if ($request->isXmlHttpRequest()) {
-            return $this->createAjaxResponse();
+            return $this->createAjaxResponse(false, $this->getTargetUrl($request));
         }
 
-        return $this->createRedirectResponse($request);
+        return new RedirectResponse($this->getTargetUrl($request));
     }
 
     public function executeOnAuthenticationSuccess(UserTransfer $userTransfer): void
@@ -97,22 +99,33 @@ class UserAuthenticationSuccessHandler extends AbstractPlugin implements Authent
         $this->getFactory()->createAuditLogger()->addSuccessfulLoginAuditLog();
     }
 
-    protected function createAjaxResponse(bool $requiresAdditionalAuth = false): JsonResponse
+    protected function createAjaxResponse(bool $requiresAdditionalAuth = false, ?string $redirectUrl = null): JsonResponse
     {
-        return new JsonResponse([
+        $data = [
             static::PARAMETER_REQUIRES_ADDITIONAL_AUTH => $requiresAdditionalAuth,
-        ]);
+            static::PARAMETER_REDIRECT_URL => $redirectUrl,
+        ];
+
+        return new JsonResponse($data);
     }
 
-    protected function createRedirectResponse(Request $request): RedirectResponse
+    protected function getTargetUrl(Request $request): string
     {
-        $targetUrl = $this->getTargetPath($request->getSession(), static::SECURITY_FIREWALL_NAME);
+        $targetPath = $this->getTargetPath($request->getSession(), static::SECURITY_FIREWALL_NAME);
 
-        if ($targetUrl) {
-            return new RedirectResponse($targetUrl);
+        if ($targetPath) {
+            return $targetPath;
         }
 
-        return new RedirectResponse($this->getConfig()->getUrlHome());
+        foreach ($this->getFactory()->getBackOfficeUserRedirectStrategyPlugins() as $backOfficeUserRedirectStrategyPlugin) {
+            if (!$backOfficeUserRedirectStrategyPlugin->isApplicable($request)) {
+                continue;
+            }
+
+            return $backOfficeUserRedirectStrategyPlugin->getRedirectUrl($request);
+        }
+
+        return $this->getConfig()->getUrlHome();
     }
 
     protected function generateAndStoreAccessToken(Request $request): void

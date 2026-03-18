@@ -5,6 +5,8 @@
     "license": "proprietary",
     "require": {
         "php": ">=8.3",
+        "spryker/event-dispatcher-extension": "^1.0.0",
+        "spryker/http": "^1.16.0",
         "spryker/kernel": "^3.30.0",
         "spryker/log": "^3.17.0",
         "spryker/messenger": "^3.0.0",
@@ -13,7 +15,7 @@
         "spryker/security": "^1.8.0",
         "spryker/security-blocker": "^1.0.0",
         "spryker/security-extension": "^1.0.0",
-        "spryker/security-gui-extension": "^1.4.0",
+        "spryker/security-gui-extension": "^1.5.0",
         "spryker/session": "^4.0.0",
         "spryker/symfony": "^3.5.0",
         "spryker/transfer": "^3.27.0",
@@ -33,7 +35,8 @@
         "spryker/testify": "*"
     },
     "suggest": {
-        "spryker-shop/customer-page": "ADD SUGGEST DESCRIPTION",
+        "spryker-shop/customer-page": "Required to wire the LastVisitedPageCustomerRedirectStrategyPlugin for Storefront post-login redirect.",
+        "spryker/event-dispatcher": "Required to wire the LastVisitedPageEventDispatcherPlugin into the event dispatcher stack.",
         "spryker/router": "You need to install this module when you want to use the RouterExtension interfaces."
     },
     "autoload": {

@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\SecurityGui;
 
+use Spryker\Service\Http\HttpServiceInterface;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\SecurityGui\Dependency\Client\SecurityGuiToSecurityBlockerClientBridge;
@@ -83,6 +84,10 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
      */
     public const FACADE_OAUTH = 'FACADE_OAUTH';
 
+    public const string PLUGINS_BACK_OFFICE_USER_REDIRECT_STRATEGY = 'PLUGINS_BACK_OFFICE_USER_REDIRECT_STRATEGY';
+
+    public const string SERVICE_HTTP = 'SERVICE_HTTP';
+
     public function provideCommunicationLayerDependencies(Container $container): Container
     {
         $container = parent::provideCommunicationLayerDependencies($container);
@@ -99,6 +104,8 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addSecurityTokenStorage($container);
         $container = $this->addSessionClient($container);
         $container = $this->addOauthFacade($container);
+        $container = $this->addBackOfficeUserRedirectStrategyPlugins($container);
+        $container = $this->addHttpService($container);
 
         return $container;
     }
@@ -247,6 +254,32 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
     protected function getUserAuthenticationHandlerPlugins(): array
     {
         return [];
+    }
+
+    protected function addBackOfficeUserRedirectStrategyPlugins(Container $container): Container
+    {
+        $container->set(static::PLUGINS_BACK_OFFICE_USER_REDIRECT_STRATEGY, function () {
+            return $this->getBackOfficeUserRedirectStrategyPlugins();
+        });
+
+        return $container;
+    }
+
+    /**
+     * @return array<\Spryker\Zed\SecurityGuiExtension\Dependency\Plugin\BackOfficeUserRedirectStrategyPluginInterface>
+     */
+    protected function getBackOfficeUserRedirectStrategyPlugins(): array
+    {
+        return [];
+    }
+
+    protected function addHttpService(Container $container): Container
+    {
+        $container->set(static::SERVICE_HTTP, function (Container $container): HttpServiceInterface {
+            return $container->getLocator()->http()->service();
+        });
+
+        return $container;
     }
 
     /**

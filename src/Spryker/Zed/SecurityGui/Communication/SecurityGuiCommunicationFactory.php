@@ -8,11 +8,17 @@
 namespace Spryker\Zed\SecurityGui\Communication;
 
 use Generated\Shared\Transfer\UserTransfer;
+use Spryker\Service\Http\HttpServiceInterface;
+use Spryker\Shared\Kernel\StrategyResolver;
+use Spryker\Shared\Kernel\StrategyResolverInterface;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
 use Spryker\Zed\SecurityGui\Communication\Authenticator\LoginFormAuthenticator;
 use Spryker\Zed\SecurityGui\Communication\Badge\MultiFactorAuthBadge;
 use Spryker\Zed\SecurityGui\Communication\Builder\SecurityGuiOptionsBuilder;
 use Spryker\Zed\SecurityGui\Communication\Builder\SecurityGuiOptionsBuilderInterface;
+use Spryker\Zed\SecurityGui\Communication\Checker\LastVisitedPageUrlChecker;
+use Spryker\Zed\SecurityGui\Communication\Checker\LastVisitedPageUrlCheckerInterface;
+use Spryker\Zed\SecurityGui\Communication\EventSubscriber\LastVisitedPageEventSubscriber;
 use Spryker\Zed\SecurityGui\Communication\Expander\SecurityBuilderExpander;
 use Spryker\Zed\SecurityGui\Communication\Expander\SecurityBuilderExpanderInterface;
 use Spryker\Zed\SecurityGui\Communication\Form\LoginForm;
@@ -24,15 +30,21 @@ use Spryker\Zed\SecurityGui\Communication\Plugin\Security\Handler\UserAuthentica
 use Spryker\Zed\SecurityGui\Communication\Plugin\Security\Handler\UserAuthenticationSuccessHandler;
 use Spryker\Zed\SecurityGui\Communication\Plugin\Security\Provider\UserProvider;
 use Spryker\Zed\SecurityGui\Communication\Plugin\Security\UserSecurityPlugin;
+use Spryker\Zed\SecurityGui\Communication\Resolver\LastVisitedPageRedirectResolver;
+use Spryker\Zed\SecurityGui\Communication\Resolver\LastVisitedPageRedirectResolverInterface;
 use Spryker\Zed\SecurityGui\Communication\Security\User;
 use Spryker\Zed\SecurityGui\Communication\Security\UserInterface;
+use Spryker\Zed\SecurityGui\Communication\Storage\LastVisitedPageCookieStorage;
+use Spryker\Zed\SecurityGui\Communication\Storage\LastVisitedPageStorageInterface;
 use Spryker\Zed\SecurityGui\Dependency\Client\SecurityGuiToSecurityBlockerClientInterface;
 use Spryker\Zed\SecurityGui\Dependency\Client\SecurityGuiToSessionClientInterface;
 use Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToMessengerFacadeInterface;
 use Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToSecurityFacadeInterface;
 use Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToUserFacadeInterface;
 use Spryker\Zed\SecurityGui\Dependency\Facade\SecurityGuiToUserPasswordResetFacadeInterface;
+use Spryker\Zed\SecurityGui\SecurityGuiConfig;
 use Spryker\Zed\SecurityGui\SecurityGuiDependencyProvider;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
@@ -213,5 +225,58 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
     public function getOauthFacade()
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::FACADE_OAUTH);
+    }
+
+    public function createLastVisitedPageEventSubscriber(): EventSubscriberInterface
+    {
+        return new LastVisitedPageEventSubscriber(
+            $this->createLastVisitedPageUrlChecker(),
+            $this->createLastVisitedPageStorageResolver()->get($this->getConfig()->getLastVisitedPageStorageType()),
+        );
+    }
+
+    public function createLastVisitedPageUrlChecker(): LastVisitedPageUrlCheckerInterface
+    {
+        return new LastVisitedPageUrlChecker(
+            $this->getSecurityFacade(),
+            $this->getHttpService(),
+        );
+    }
+
+    /**
+     * @return \Spryker\Shared\Kernel\StrategyResolverInterface<\Spryker\Zed\SecurityGui\Communication\Storage\LastVisitedPageStorageInterface>
+     */
+    public function createLastVisitedPageStorageResolver(): StrategyResolverInterface
+    {
+        return new StrategyResolver(
+            [SecurityGuiConfig::STORAGE_TYPE_COOKIE => $this->createLastVisitedPageCookieStorage()],
+            SecurityGuiConfig::STORAGE_TYPE_COOKIE,
+        );
+    }
+
+    public function createLastVisitedPageCookieStorage(): LastVisitedPageStorageInterface
+    {
+        return new LastVisitedPageCookieStorage($this->getConfig());
+    }
+
+    public function getHttpService(): HttpServiceInterface
+    {
+        return $this->getProvidedDependency(SecurityGuiDependencyProvider::SERVICE_HTTP);
+    }
+
+    public function createLastVisitedPageRedirectResolver(): LastVisitedPageRedirectResolverInterface
+    {
+        return new LastVisitedPageRedirectResolver(
+            $this->createLastVisitedPageStorageResolver()->get($this->getConfig()->getLastVisitedPageStorageType()),
+            $this->getHttpService(),
+        );
+    }
+
+    /**
+     * @return array<\Spryker\Zed\SecurityGuiExtension\Dependency\Plugin\BackOfficeUserRedirectStrategyPluginInterface>
+     */
+    public function getBackOfficeUserRedirectStrategyPlugins(): array
+    {
+        return $this->getProvidedDependency(SecurityGuiDependencyProvider::PLUGINS_BACK_OFFICE_USER_REDIRECT_STRATEGY);
     }
 }
