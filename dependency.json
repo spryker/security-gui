@@ -1,5 +1,6 @@
 {
     "include": {
-        "spryker/transfer": "Provides transfer objects definition with strict types."
+        "spryker/transfer": "Provides transfer objects definition with strict types.",
+        "spryker/gui": "Provides Twig configValue function for reading the configuration values in templates."
     }
 }

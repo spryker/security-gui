@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.3",
         "spryker/event-dispatcher-extension": "^1.0.0",
+        "spryker/gui": "^5.1.0",
         "spryker/http": "^1.16.0",
         "spryker/kernel": "^3.30.0",
         "spryker/log": "^3.17.0",
