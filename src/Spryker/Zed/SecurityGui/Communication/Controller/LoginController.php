@@ -48,7 +48,13 @@ class LoginController extends AbstractController
         $oauthAuthenticationLinkTransfers = [];
 
         foreach ($this->getFactory()->getAuthenticationLinkPlugins() as $authenticationLinkPlugin) {
-            $oauthAuthenticationLinkTransfers[] = $authenticationLinkPlugin->getAuthenticationLink();
+            $authenticationLinkTransfer = $authenticationLinkPlugin->getAuthenticationLink();
+
+            if ($authenticationLinkTransfer->getHref() === null && $authenticationLinkTransfer->getText() === null) {
+                continue;
+            }
+
+            $oauthAuthenticationLinkTransfers[] = $authenticationLinkTransfer;
         }
 
         return $oauthAuthenticationLinkTransfers;
