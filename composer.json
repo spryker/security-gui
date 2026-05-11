@@ -5,6 +5,7 @@
     "license": "proprietary",
     "require": {
         "php": ">=8.3",
+        "spryker/container": "^1.1.0",
         "spryker/event-dispatcher-extension": "^1.0.0",
         "spryker/gui": "^5.1.0",
         "spryker/http": "^1.16.0",
@@ -27,7 +28,6 @@
     "require-dev": {
         "spryker/application": "*",
         "spryker/code-sniffer": "*",
-        "spryker/container": "*",
         "spryker/customer": "*",
         "spryker/event-dispatcher": "*",
         "spryker/form": "*",
