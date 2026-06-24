@@ -14,10 +14,15 @@ use Symfony\Component\HttpFoundation\Cookie;
 class SecurityGuiConfig extends AbstractBundleConfig
 {
     /**
+     * @api
+     *
      * @var string
      */
     public const ROLE_BACK_OFFICE_USER = 'ROLE_BACK_OFFICE_USER';
 
+    /**
+     * @api
+     */
     public const string STORAGE_TYPE_COOKIE = 'cookie';
 
     /**
