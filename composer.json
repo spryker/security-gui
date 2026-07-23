@@ -21,7 +21,7 @@
         "spryker/session": "^4.0.0",
         "spryker/symfony": "^3.5.0",
         "spryker/transfer": "^3.27.0",
-        "spryker/user": "^3.17.0",
+        "spryker/user": "^3.32.0",
         "spryker/user-password-reset": "^1.0.0",
         "spryker/validator": "^1.6.0"
     },

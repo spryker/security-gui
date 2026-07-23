@@ -10,6 +10,7 @@ namespace Spryker\Zed\SecurityGui\Communication\Expander;
 use Spryker\Service\Container\ContainerInterface;
 use Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface;
 use Spryker\Zed\SecurityGui\Communication\Builder\SecurityGuiOptionsBuilderInterface;
+use Spryker\Zed\SecurityGui\Communication\Plugin\Security\Handler\AccessDeniedHandler;
 use Spryker\Zed\SecurityGui\SecurityGuiConfig;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 
@@ -34,6 +35,8 @@ class SecurityBuilderExpander implements SecurityBuilderExpanderInterface
      * @var string
      */
     protected const SECURITY_USER_LOGIN_FORM_AUTHENTICATOR = 'security.User.login_form.authenticator';
+
+    protected const string SERVICE_SECURITY_TOKEN_STORAGE = 'security.token_storage';
 
     /**
      * @var \Spryker\Zed\SecurityGui\Communication\Builder\SecurityGuiOptionsBuilderInterface
@@ -64,6 +67,7 @@ class SecurityBuilderExpander implements SecurityBuilderExpanderInterface
     {
         $securityBuilder = $this->addFirewalls($securityBuilder);
         $securityBuilder = $this->addAccessRules($securityBuilder);
+        $securityBuilder = $this->addAccessDeniedHandler($securityBuilder, $container);
         $this->addAuthenticator($container);
 
         return $securityBuilder;
@@ -93,6 +97,18 @@ class SecurityBuilderExpander implements SecurityBuilderExpanderInterface
                 SecurityGuiConfig::ROLE_BACK_OFFICE_USER,
             ],
         ]);
+    }
+
+    protected function addAccessDeniedHandler(SecurityBuilderInterface $securityBuilder, ContainerInterface $container): SecurityBuilderInterface
+    {
+        $securityBuilder->addAccessDeniedHandler(static::SECURITY_FIREWALL_NAME, function () use ($container) {
+            return new AccessDeniedHandler(
+                $container->get(static::SERVICE_SECURITY_TOKEN_STORAGE),
+                $this->config->getUrlLogin(),
+            );
+        });
+
+        return $securityBuilder;
     }
 
     protected function addAuthenticator(ContainerInterface $container): void
