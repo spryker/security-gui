@@ -90,11 +90,11 @@ class MultiFactorAuthBadge implements BadgeInterface
 
     /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request|null $request
      *
      * @return $this
      */
-    public function enable(UserTransfer $userTransfer, Request $request)
+    public function enable(UserTransfer $userTransfer, ?Request $request = null)
     {
         foreach ($this->userMultiFactorAuthenticationHandlerPlugins as $plugin) {
             if ($plugin->isApplicable(static::USER_MULTI_FACTOR_AUTHENTICATION_HANDLER_NAME) === false) {
@@ -112,7 +112,7 @@ class MultiFactorAuthBadge implements BadgeInterface
                     $plugin->invalidateUserCodes($multiFactorAuthTransfer);
                 }
 
-                if ($this->isRequestCorrupted($request)) {
+                if ($request !== null && $this->isRequestCorrupted($request)) {
                     $this->setIsResolved(false);
 
                     return $this;
