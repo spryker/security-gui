@@ -115,7 +115,7 @@ class UserProvider extends AbstractPlugin implements UserProviderInterface
      *
      * @return \Symfony\Component\Security\Core\User\UserInterface
      */
-    public function refreshUser(UserInterface $user)
+    public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof User) {
             return $user;
@@ -145,7 +145,7 @@ class UserProvider extends AbstractPlugin implements UserProviderInterface
      *
      * @return bool
      */
-    public function supportsClass($class)
+    public function supportsClass(string $class): bool
     {
         return is_a($class, User::class, true);
     }

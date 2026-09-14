@@ -90,9 +90,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Equatab
         return $this->password;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getUserIdentifier(): string
     {
-        return $this->userTransfer->getUsernameOrFail();
+        $username = $this->userTransfer->getUsernameOrFail();
+        assert($username !== '');
+
+        return $username;
     }
 
     public function eraseCredentials(): void
