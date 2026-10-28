@@ -41,6 +41,10 @@ class ZedUserSecurityPluginTest extends Unit
      */
     protected const SERVICE_SECURITY_TOKEN_STORAGE = 'security.token_storage';
 
+    protected const string SERVICE_FORM_CSRF_PROVIDER = 'form.csrf_provider';
+
+    protected const string LOGIN_FORM_NAME = 'auth';
+
     /**
      * @var \SprykerTest\Zed\SecurityGui\SecurityGuiCommunicationTester
      */
@@ -78,11 +82,12 @@ class ZedUserSecurityPluginTest extends Unit
         $this->assertNull($token);
 
         $container->get(static::SERVICE_SESSION)->start();
+        $csrfToken = $container->get(static::SERVICE_FORM_CSRF_PROVIDER)->getToken(static::LOGIN_FORM_NAME)->getValue();
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
 
         // Act
         $httpKernelBrowser->request('get', '/ignorable');
-        $httpKernelBrowser->request('post', '/login_check', ['auth' => ['username' => $userTransfer->getUsername(), 'password' => 'foo']]);
+        $httpKernelBrowser->request('post', '/login_check', ['auth' => ['username' => $userTransfer->getUsername(), 'password' => 'foo', '_token' => $csrfToken]]);
 
         // Assert
         /** @var \Spryker\Zed\SecurityGui\Communication\Security\User $user */
@@ -111,6 +116,39 @@ class ZedUserSecurityPluginTest extends Unit
         // Assert
         $token = $container->get(static::SERVICE_SECURITY_TOKEN_STORAGE)->getToken();
         $this->assertNull($token);
+    }
+
+    /**
+     * @dataProvider invalidCsrfTokenDataProvider
+     *
+     * @param array<string, string> $csrfTokenField
+     *
+     * @return void
+     */
+    public function testUserWithValidCredentialsAndInvalidCsrfTokenCanNotLogin(array $csrfTokenField): void
+    {
+        // Arrange
+        $container = $this->tester->getContainer();
+        $userTransfer = $this->tester->haveUser([UserTransfer::PASSWORD => 'foo']);
+        $container->get(static::SERVICE_SESSION)->start();
+
+        // Act
+        $this->tester->getHttpKernelBrowser()->request('post', '/login_check', ['auth' => ['username' => $userTransfer->getUsername(), 'password' => 'foo'] + $csrfTokenField]);
+
+        // Assert
+        $this->assertNull($container->get(static::SERVICE_SECURITY_TOKEN_STORAGE)->getToken());
+    }
+
+    /**
+     * @return array<string, array<array<string, string>>>
+     */
+    public function invalidCsrfTokenDataProvider(): array
+    {
+        return [
+            'missing token' => [[]],
+            'empty token' => [['_token' => '']],
+            'invalid token' => [['_token' => 'invalid-token']],
+        ];
     }
 
     public function testIgnorablePathsAreAccessible(): void
