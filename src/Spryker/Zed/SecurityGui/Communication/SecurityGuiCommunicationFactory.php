@@ -279,4 +279,12 @@ class SecurityGuiCommunicationFactory extends AbstractCommunicationFactory
     {
         return $this->getProvidedDependency(SecurityGuiDependencyProvider::PLUGINS_BACK_OFFICE_USER_REDIRECT_STRATEGY);
     }
+
+    /**
+     * @return list<\Spryker\Zed\SecurityGuiExtension\Dependency\Plugin\UserLoginFormExpanderPluginInterface>
+     */
+    public function getUserLoginFormExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(SecurityGuiDependencyProvider::PLUGINS_USER_LOGIN_FORM_EXPANDER);
+    }
 }

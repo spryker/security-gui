@@ -12,6 +12,10 @@
             {{ form_row(form.username) }}
             {{ form_row(form.password) }}
 
+            {% if form.captcha is defined %}
+                {{ form_row(form.captcha) }}
+            {% endif %}
+
             <div class="form-group d-grid"><button class="btn btn-primary" type="submit">{{ 'Login' | trans }}</button></div>
             <div class="form-group text-center">
                 <a href="/security-gui/password/reset-request" class="login-box__link">{{ 'Forgot password?' | trans }}</a>

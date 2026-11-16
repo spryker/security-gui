@@ -47,6 +47,8 @@ class LoginForm extends AbstractType
 
         $this->addUserNameField($builder)
             ->addPasswordField($builder);
+
+        $this->executeUserLoginFormExpanderPlugins($builder, $options);
     }
 
     public function getBlockPrefix(): string
@@ -93,5 +95,17 @@ class LoginForm extends AbstractType
             ]);
 
         return $this;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function executeUserLoginFormExpanderPlugins(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        foreach ($this->getFactory()->getUserLoginFormExpanderPlugins() as $userLoginFormExpanderPlugin) {
+            $builder = $userLoginFormExpanderPlugin->expand($builder, $options);
+        }
+
+        return $builder;
     }
 }

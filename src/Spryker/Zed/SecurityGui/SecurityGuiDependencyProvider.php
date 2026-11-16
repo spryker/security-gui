@@ -88,6 +88,8 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
 
     public const string SERVICE_HTTP = 'SERVICE_HTTP';
 
+    public const string PLUGINS_USER_LOGIN_FORM_EXPANDER = 'PLUGINS_USER_LOGIN_FORM_EXPANDER';
+
     public function provideCommunicationLayerDependencies(Container $container): Container
     {
         $container = parent::provideCommunicationLayerDependencies($container);
@@ -106,6 +108,7 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addOauthFacade($container);
         $container = $this->addBackOfficeUserRedirectStrategyPlugins($container);
         $container = $this->addHttpService($container);
+        $container = $this->addUserLoginFormExpanderPlugins($container);
 
         return $container;
     }
@@ -305,5 +308,22 @@ class SecurityGuiDependencyProvider extends AbstractBundleDependencyProvider
         });
 
         return $container;
+    }
+
+    protected function addUserLoginFormExpanderPlugins(Container $container): Container
+    {
+        $container->set(static::PLUGINS_USER_LOGIN_FORM_EXPANDER, function () {
+            return $this->getUserLoginFormExpanderPlugins();
+        });
+
+        return $container;
+    }
+
+    /**
+     * @return list<\Spryker\Zed\SecurityGuiExtension\Dependency\Plugin\UserLoginFormExpanderPluginInterface>
+     */
+    protected function getUserLoginFormExpanderPlugins(): array
+    {
+        return [];
     }
 }
